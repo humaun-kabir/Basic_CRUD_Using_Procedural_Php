@@ -41,20 +41,39 @@
 
     <div class="main">
         <h2>Updating First Name and Last Name</h2>
-        <form action="" method="POST">
+        <?php
+            //getting value from url
+            $id = $_GET['id'];
+
+            //connect databse
+            $conn = mysqli_connect('localhost','root','') or die(mysqli_error());
+            //select database
+            $select_db = mysqli_select_db($conn,'basic_crud') or die(mysqli_error());
+            //query to select data
+            $sql = "SELECT * FROM tbl_users WHERE id=".$id;
+            //executing the query
+            $result = mysqli_query($conn,$sql);
+            if($result==TRUE)
+            {
+                $row = mysqli_fetch_assoc($result);
+                $first_name = $row['first_name'];
+                $last_name = $row['last_name'];
+            }
+        ?>
+        <form action="edit_action.php" method="POST">
             <table>
                 <tr>
                     <td>First Name :</td>
-                    <td><input type="text" name="first_name" placeholder="First name"></td>
+                    <td><input type="text" name="first_name" value="<?php echo $first_name; ?>" ></td>
                 </tr>
 
                 <tr>
                     <td>Last Name :</td>
-                    <td><input type="text" name="last_name" placeholder="Last name"></td>
+                    <td><input type="text" name="last_name" value="<?php echo $last_name; ?>"></td>
                 </tr>
 
                 <tr>
-                    <td>&nbsp;</td>
+                    <td>&nbsp; <input type="hidden" name="id" value="<?php echo $id; ?>"></td>
                     <td><input type="submit" name="submit" value="Update Member"></td>
                 </tr>
             </table>

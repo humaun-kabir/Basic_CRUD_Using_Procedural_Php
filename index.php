@@ -41,7 +41,7 @@
 
     <div class="main">
         <h2>Adding First Name and Last Name</h2>
-        <form action="" method="POST">
+        <form action="add_action.php" method="POST">
             <table>
                 <tr>
                     <td>First Name :</td>
@@ -73,15 +73,40 @@
                 <th>Actions</th>
             </tr>
 
-            <tr>
-                <td>S.N.</td>
-                <td>First Name</td>
-                <td>Last Name</td>
-                <td>
-                    <a href="#"><button type="button">UPDATE</button></a>
-                    <a href="#"><button type="button">DELETE</button></a>
-                </td>
-            </tr>
+            <?php
+                //connect databse
+                $conn = mysqli_connect('localhost','root','') or die(mysqli_error());
+                //select database
+                $select_db = mysqli_select_db($conn,'basic_crud') or die(mysqli_error());
+                
+                $sql = "SELECT * FROM tbl_users";
+                $result = mysqli_query($conn,$sql) or die(mysqli_error());
+                $sn=1;
+                if($result==TRUE)
+                {
+                    while($row=mysqli_fetch_assoc($result))
+                    {
+                        $id = $row['id'];
+                        $first_name = $row['first_name'];
+                        $last_name = $row['last_name'];
+
+                        ?>
+                        <tr>
+                            <td><?php echo $sn++; ?></td>
+                            <td><?php echo $first_name;  ?></td>
+                            <td><?php echo $last_name; ?></td>
+                            <td>
+                                <a href="edit.php?id=<?php echo $id; ?>"><button type="button">UPDATE</button></a>
+                                <a href="delete.php?id=<?php echo $id; ?>"><button type="button">DELETE</button></a>
+                            </td>
+                        </tr>
+
+                        <?php
+                    }
+                }
+            ?>
+
+            
         </table>
     </div>
 
